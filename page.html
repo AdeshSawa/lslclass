@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LSL: The Engine of Virtual Reality</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Chosen Palette: Neon Future (Dark Slate, Cyan, Violet, Pink) -->
+    <!-- Application Structure Plan:
+         1. Hero Section: Hook and Definition.
+         2. Core Logic: CSS-based Flow Diagram of State/Event Architecture.
+         3. Data Types: Horizontal Bar Chart comparing type complexity.
+         4. The Toolbox: Polar Area Chart for Events and Doughnut Chart for Functions.
+         5. Environment: Visualizing Memory Limits (64KB) and Vectors.
+         6. Roadmap: Vertical Step-by-Step Timeline.
+    -->
+    <!-- Visualization & Content Choices:
+         - Data Types -> Goal: Compare -> Horizontal Bar Chart -> Shows relative complexity/memory cost.
+         - Function Categories -> Goal: Inform/Organize -> Doughnut Chart -> Shows the distribution of built-in toolsets.
+         - Common Events -> Goal: Relationships -> Polar Area Chart -> Visualizes frequency of use.
+         - Learning Path -> Goal: Change/Process -> HTML/CSS Timeline -> Linear progression.
+         - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+            color: #e2e8f0; /* Slate 200 */
+        }
+
+        h1, h2, h3, .mono-font {
+            font-family: 'JetBrains+Mono', monospace;
+        }
+
+        /* Chart Container Styling - MANDATORY */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        /* Neon Glow Effects */
+        .glow-text {
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+        }
+        .glow-box {
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b; 
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-cyan-500 selection:text-white">
+
+    <!-- HERO SECTION -->
+    <header class="relative overflow-hidden py-20 px-6 text-center border-b border-slate-800">
+        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-cyan-500 via-violet-500 to-pink-500"></div>
+        <div class="max-w-4xl mx-auto">
+            <span class="inline-block py-1 px-3 rounded-full bg-slate-800 border border-slate-700 text-cyan-400 text-sm font-bold tracking-wide mb-6">LINDEN SCRIPTING LANGUAGE</span>
+            <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 glow-text">
+                BREATHE LIFE<br>INTO <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-violet-400">THE VIRTUAL</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto">
+                LSL is the event-driven heartbeat of Second Life. From simple lights to complex vehicles, this guide decodes the matrix of virtual interactivity.
+            </p>
+        </div>
+    </header>
+
+    <!-- SECTION 1: CORE ARCHITECTURE (State-Event Model) -->
+    <section class="py-16 px-6 bg-slate-900">
+        <div class="max-w-6xl mx-auto">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-bold text-white mb-4">1. The Core Engine: State & Event</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">
+                    Unlike linear programming, LSL is a state machine. An object exists in one "State" (like 'On' or 'Off') and waits for an "Event" (like a touch) to trigger code.
+                </p>
+            </div>
+
+            <!-- CSS Flowchart (Replacing Mermaid) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center justify-items-center relative">
+                
+                <!-- State Block -->
+                <div class="w-full max-w-xs p-6 bg-slate-800 border-2 border-cyan-500 rounded-xl glow-box text-center z-10">
+                    <div class="text-xs uppercase text-cyan-400 font-bold mb-2">Current Context</div>
+                    <h3 class="text-2xl text-white font-bold">STATE</h3>
+                    <p class="text-sm text-slate-400 mt-2">"default"</p>
+                </div>
+
+                <!-- Event Arrow (Desktop) -->
+                <div class="hidden md:flex flex-col items-center justify-center w-full z-0">
+                    <div class="text-pink-400 font-bold mono-font mb-2">EVENT TRIGGERS</div>
+                    <div class="h-1 w-full bg-gradient-to-r from-cyan-500 to-violet-500 rounded"></div>
+                    <div class="text-xs text-slate-500 mt-2">touch_start(), timer()</div>
+                </div>
+                <!-- Event Arrow (Mobile) -->
+                <div class="md:hidden flex flex-col items-center h-16">
+                    <div class="w-1 h-full bg-gradient-to-b from-cyan-500 to-violet-500 rounded"></div>
+                </div>
+
+                <!-- Execution Block -->
+                <div class="w-full max-w-xs p-6 bg-slate-800 border-2 border-violet-500 rounded-xl glow-box text-center z-10">
+                    <div class="text-xs uppercase text-violet-400 font-bold mb-2">Response</div>
+                    <h3 class="text-2xl text-white font-bold">EXECUTION</h3>
+                    <p class="text-sm text-slate-400 mt-2">Code runs -> State changes</p>
+                </div>
+            </div>
+
+            <div class="mt-12 p-6 bg-slate-800/50 rounded-lg border border-slate-700">
+                <h3 class="text-xl text-white font-bold mb-4 mono-font border-b border-slate-700 pb-2">The Golden Rule</h3>
+                <p class="text-slate-300">
+                    Every script <strong>MUST</strong> have a state named <span class="text-cyan-400 font-mono">default</span>. This is the entry point where logic begins.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: DATA TYPES (Strict Typing) -->
+    <section class="py-16 px-6 bg-slate-800">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                
+                <!-- Content -->
+                <div>
+                    <h2 class="text-3xl font-bold text-white mb-4">2. The Building Blocks</h2>
+                    <p class="text-slate-400 mb-6">
+                        LSL uses strict typing. You must declare the container type before filling it. Misusing types (like putting text into an integer) causes syntax errors.
+                    </p>
+                    <ul class="space-y-3 text-slate-300">
+                        <li class="flex items-center"><span class="w-3 h-3 bg-cyan-500 rounded-full mr-3"></span><strong>Integer:</strong> Whole numbers (32-bit).</li>
+                        <li class="flex items-center"><span class="w-3 h-3 bg-violet-500 rounded-full mr-3"></span><strong>Vector:</strong> 3D Coordinates &lt;x,y,z&gt;.</li>
+                        <li class="flex items-center"><span class="w-3 h-3 bg-pink-500 rounded-full mr-3"></span><strong>Key:</strong> Unique UUIDs for assets.</li>
+                    </ul>
+                </div>
+
+                <!-- Chart: Data Type Complexity -->
+                <div class="bg-slate-900 p-4 rounded-xl shadow-lg border border-slate-700">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase mb-4 text-center">Concept: Complexity & Memory Cost</h3>
+                    <div class="chart-container">
+                        <canvas id="typesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: TOOLBOX (Events & Functions) -->
+    <section class="py-16 px-6 bg-slate-900">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl font-bold text-white text-center mb-12">3. The Scripter's Toolkit</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                
+                <!-- Chart: Common Events -->
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <h3 class="text-xl text-white font-bold mb-2">Essential Events</h3>
+                    <p class="text-sm text-slate-400 mb-6">How often you will use these triggers in daily scripting.</p>
+                    <div class="chart-container">
+                        <canvas id="eventsChart"></canvas>
+                    </div>
+                    <p class="mt-4 text-xs text-center text-slate-500">Based on typical starter projects</p>
+                </div>
+
+                <!-- Chart: Function Categories -->
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <h3 class="text-xl text-white font-bold mb-2">Function Capabilities</h3>
+                    <p class="text-sm text-slate-400 mb-6">The <span class="font-mono text-cyan-400">llFunction</span> library powers interaction.</p>
+                    <div class="chart-container">
+                        <canvas id="functionsChart"></canvas>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mt-4 text-xs text-slate-400">
+                        <div class="p-2 bg-slate-700 rounded text-center">llSay (Chat)</div>
+                        <div class="p-2 bg-slate-700 rounded text-center">llSetPos (Move)</div>
+                        <div class="p-2 bg-slate-700 rounded text-center">llSetColor (Look)</div>
+                        <div class="p-2 bg-slate-700 rounded text-center">llDie (Cleanup)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: ENVIRONMENT & LIMITS -->
+    <section class="py-16 px-6 bg-slate-800 relative">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-3xl font-bold text-white text-center mb-10">4. Environmental Constraints</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- Memory Limit Card -->
+                <div class="bg-slate-900 p-8 rounded-2xl border-l-4 border-pink-500 shadow-xl">
+                    <div class="flex justify-between items-end mb-4">
+                        <h3 class="text-xl font-bold text-white">Memory Cap</h3>
+                        <span class="text-pink-500 font-mono text-2xl font-bold">64 KB</span>
+                    </div>
+                    <p class="text-slate-400 mb-6">Mono-compiled scripts have a hard limit. Large lists or excessive text can crash your script.</p>
+                    
+                    <!-- HTML/CSS Progress Bar Visual -->
+                    <div class="w-full bg-slate-700 rounded-full h-4 mb-2 overflow-hidden">
+                        <div class="bg-gradient-to-r from-cyan-500 to-pink-500 h-4 rounded-full" style="width: 75%"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-slate-500 font-mono">
+                        <span>0 KB</span>
+                        <span>Warning Zone</span>
+                        <span>64 KB</span>
+                    </div>
+                </div>
+
+                <!-- Linkset Data Card -->
+                <div class="bg-slate-900 p-8 rounded-2xl border-l-4 border-cyan-500 shadow-xl">
+                    <h3 class="text-xl font-bold text-white mb-2">Linkset Data (LSD)</h3>
+                    <p class="text-slate-400 mb-4">The modern solution for data storage.</p>
+                    <div class="flex space-x-4 mb-4">
+                        <div class="flex-1 bg-slate-800 p-3 rounded text-center border border-slate-700">
+                            <div class="text-cyan-400 font-bold text-lg">FAST</div>
+                            <div class="text-xs text-slate-500">Access Speed</div>
+                        </div>
+                        <div class="flex-1 bg-slate-800 p-3 rounded text-center border border-slate-700">
+                            <div class="text-violet-400 font-bold text-lg">SHARED</div>
+                            <div class="text-xs text-slate-500">Across Scripts</div>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500 italic">"Much faster than old Link Messages."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: LEARNING PATH (Timeline) -->
+    <section class="py-16 px-6 bg-slate-900">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-white text-center mb-12">5. The Path to Mastery</h2>
+            
+            <div class="relative border-l-2 border-slate-700 ml-4 md:ml-10 space-y-12">
+                
+                <!-- Step 1 -->
+                <div class="relative pl-8 md:pl-12 group">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 bg-cyan-500 rounded-full border-4 border-slate-900 group-hover:scale-125 transition-transform"></div>
+                    <div class="bg-slate-800 p-6 rounded-lg border border-slate-700 hover:border-cyan-500 transition-colors">
+                        <span class="text-cyan-400 font-mono text-sm font-bold">LEVEL 1</span>
+                        <h3 class="text-xl text-white font-bold mt-1">The Color Changer</h3>
+                        <p class="text-slate-400 mt-2">Learn the basics of <span class="font-mono text-slate-200 bg-slate-700 px-1 rounded">touch_start</span> and appearance functions. Click the object, change the color.</p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative pl-8 md:pl-12 group">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 bg-violet-500 rounded-full border-4 border-slate-900 group-hover:scale-125 transition-transform"></div>
+                    <div class="bg-slate-800 p-6 rounded-lg border border-slate-700 hover:border-violet-500 transition-colors">
+                        <span class="text-violet-400 font-mono text-sm font-bold">LEVEL 2</span>
+                        <h3 class="text-xl text-white font-bold mt-1">The Greeting Bot</h3>
+                        <p class="text-slate-400 mt-2">Master detection. Use <span class="font-mono text-slate-200 bg-slate-700 px-1 rounded">sensor</span> to find avatars nearby and <span class="font-mono text-slate-200 bg-slate-700 px-1 rounded">llSay</span> to talk to them.</p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative pl-8 md:pl-12 group">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 bg-pink-500 rounded-full border-4 border-slate-900 group-hover:scale-125 transition-transform"></div>
+                    <div class="bg-slate-800 p-6 rounded-lg border border-slate-700 hover:border-pink-500 transition-colors">
+                        <span class="text-pink-500 font-mono text-sm font-bold">LEVEL 3</span>
+                        <h3 class="text-xl text-white font-bold mt-1">The Timed Light</h3>
+                        <p class="text-slate-400 mt-2">Introduce logic flow. Use <span class="font-mono text-slate-200 bg-slate-700 px-1 rounded">timer</span> events to toggle automatically between an "On" state and an "Off" state.</p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="relative pl-8 md:pl-12 group">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 bg-white rounded-full border-4 border-slate-900 group-hover:scale-125 transition-transform"></div>
+                    <div class="bg-slate-800 p-6 rounded-lg border border-slate-700 hover:border-white transition-colors">
+                        <span class="text-white font-mono text-sm font-bold">LEVEL 4</span>
+                        <h3 class="text-xl text-white font-bold mt-1">Mastering Rotations</h3>
+                        <p class="text-slate-400 mt-2">The boss battle. Understanding <span class="font-mono text-slate-200 bg-slate-700 px-1 rounded">Quaternions</span> for complex orientation. The steepest learning curve.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-10 bg-slate-950 text-center border-t border-slate-800">
+        <p class="text-slate-500 text-sm">Generated for LSL Learners | Source: Linden Scripting Language Study Guide</p>
+    </footer>
+
+    <!-- SCRIPT LOGIC -->
+    <script>
+        // Chart Config Defaults
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.scale.grid.color = '#334155';
+        
+        // --- Helper: Word Wrap Logic ---
+        function wrapLabel(str, maxLen) {
+            if (str.length <= maxLen) return str;
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if (currentLine.length + 1 + words[i].length <= maxLen) {
+                    currentLine += ' ' + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // --- Helper: Tooltip Callback ---
+        const tooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        // 1. DATA TYPES CHART (Horizontal Bar)
+        const typesCtx = document.getElementById('typesChart').getContext('2d');
+        new Chart(typesCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Integer', 'Float', 'Key', 'Vector', 'Rotation', 'List'].map(l => wrapLabel(l, 16)),
+                datasets: [{
+                    label: 'Complexity / Memory Cost (Conceptual)',
+                    data: [1, 2, 3, 4, 5, 8], // Conceptual values
+                    backgroundColor: [
+                        '#06b6d4', // Cyan
+                        '#06b6d4', 
+                        '#8b5cf6', // Violet
+                        '#8b5cf6',
+                        '#ec4899', // Pink
+                        '#ec4899'
+                    ],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: tooltipConfig
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Relative Complexity' }
+                    }
+                }
+            }
+        });
+
+        // 2. EVENTS CHART (Polar Area)
+        const eventsCtx = document.getElementById('eventsChart').getContext('2d');
+        new Chart(eventsCtx, {
+            type: 'polarArea',
+            data: {
+                labels: ['Touch Start', 'State Entry', 'Timer', 'Sensor', 'Listen'].map(l => wrapLabel(l, 16)),
+                datasets: [{
+                    label: 'Frequency of Use',
+                    data: [9, 8, 7, 5, 6], // Conceptual
+                    backgroundColor: [
+                        'rgba(6, 182, 212, 0.7)',
+                        'rgba(139, 92, 246, 0.7)',
+                        'rgba(236, 72, 153, 0.7)',
+                        'rgba(20, 184, 166, 0.7)',
+                        'rgba(99, 102, 241, 0.7)'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom', labels: { boxWidth: 10 } },
+                    tooltip: tooltipConfig
+                },
+                scales: {
+                    r: {
+                        grid: { color: '#334155' },
+                        ticks: { display: false, backdropColor: 'transparent' }
+                    }
+                }
+            }
+        });
+
+        // 3. FUNCTIONS CHART (Doughnut)
+        const funcCtx = document.getElementById('functionsChart').getContext('2d');
+        new Chart(funcCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Communication', 'Movement', 'Appearance', 'Utility'].map(l => wrapLabel(l, 16)),
+                datasets: [{
+                    data: [30, 20, 25, 25],
+                    backgroundColor: [
+                        '#06b6d4', // Cyan
+                        '#8b5cf6', // Violet
+                        '#ec4899', // Pink
+                        '#f8fafc'  // White/Slate
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                cutout: '70%',
+                plugins: {
+                    legend: { position: 'right', labels: { boxWidth: 10 } },
+                    tooltip: tooltipConfig
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>
