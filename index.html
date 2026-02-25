@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LSL Interactive Class</title>
+    <title>Hard Knox Technical College - LSL Interactive Class</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -46,25 +46,6 @@
             font-weight: 600;
         }
     </style>
-    <!-- Chosen Palette: Slate & Blue - 'Warm Neutral' background (Slate-50) with professional Blue (Blue-600) accents for a calm, technical feel. -->
-    <!-- Application Structure Plan:
-         1. Header: Quick context.
-         2. Concept Visualizer: Interactive breakdown of State/Event architecture (Core Architecture).
-         3. Data Type Explorer: Grid with filtering for types (Fundamental Data Types).
-         4. Code Lab: Interactive snippet that explains lines on hover (Basic Script Skeleton).
-         5. Knowledge Graph: Chart.js visualization of concept difficulty vs importance (Analysis).
-         6. Reference Deck: Tabbed view for Functions vs Events with search (Essential Events/Key Functions).
-         7. Mastery Path: Timeline for the learning levels (Recommended Learning Path).
-         Rationale: Breaks the text-heavy guide into functional modules. Users learn the 'what' (types), then the 'how' (logic), then the 'tools' (functions), and finally the 'path' (roadmap). 
-    -->
-    <!-- Visualization & Content Choices:
-         - Concept Matrix (Chart.js): Scatter plot to show 'Difficulty' vs 'Frequency of Use'. Helps learners manage expectations (e.g., Rotations are hard but rare for beginners).
-         - Interactive Code Block: HTML/JS hover effects. Essential for coding guides to link syntax to meaning.
-         - Filterable Grids: For Data Types and Functions. Allows quick lookup.
-         - Timeline: Vertical layout for Learning Path. logical progression.
-         - NO SVG/Mermaid: All icons are Unicode or CSS shapes. Charts are Canvas.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans leading-relaxed">
 
@@ -74,7 +55,7 @@
             <div class="flex justify-between h-16 items-center">
                 <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="scrollToSection('hero')">
                     <span class="text-2xl">⚡</span>
-                    <span class="font-bold text-xl tracking-tight text-slate-900">LSL <span class="text-blue-600">Mastery</span></span>
+                    <span class="font-bold text-xl tracking-tight text-slate-900">LSL <span class="text-blue-600">Class</span></span>
                 </div>
                 <div class="hidden md:flex space-x-8">
                     <button onclick="scrollToSection('concepts')" class="nav-item text-slate-600 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors">Core Concepts</button>
@@ -551,15 +532,6 @@
         // 5. Chart.js Visualization
         function initChart() {
             const ctx = document.getElementById('conceptChart').getContext('2d');
-            
-            // Data points: x = Frequency (Usefulness), y = Difficulty
-            // Integers/Strings: High Freq (9), Low Diff (1)
-            // States: Med Freq (7), Med Diff (4)
-            // Events: High Freq (8), Med Diff (3)
-            // Rotations: Low Freq (3), High Diff (9)
-            // Sensors: Med Freq (5), Med Diff (5)
-            // LSD: Med Freq (6), Med Diff (6)
-
             const scatterData = {
                 datasets: [{
                     label: 'LSL Concepts',
