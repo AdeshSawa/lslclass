@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete LSL Event Reference (39 Events)</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        [v-cloak] { display: none; }
+        .event-card:hover { border-color: #60a5fa; shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200 min-h-screen font-sans pb-20">
+
+    <div id="app" v-cloak class="max-w-7xl mx-auto p-4 md:p-10">
+        <header class="mb-12 border-b border-slate-800 pb-8">
+            <h1 class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 mb-3">
+                LSL Master Event List
+            </h1>
+            <p class="text-slate-400 text-lg">The complete technical reference for all 39 Linden Scripting Language events.</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-10 items-end">
+            <div class="lg:col-span-2">
+                <label class="text-xs uppercase tracking-widest text-slate-500 font-bold mb-2 block">Search Documentation</label>
+                <input v-model="search" type="text" placeholder="Search name or keywords..." 
+                    class="w-full bg-slate-900 border border-slate-700 rounded-lg px-5 py-3 focus:ring-2 focus:ring-blue-500 outline-none text-white">
+            </div>
+            <div>
+                <label class="text-xs uppercase tracking-widest text-slate-500 font-bold mb-2 block">Category</label>
+                <select v-model="selectedCategory" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="All">All Events (39)</option>
+                    <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
+                </select>
+            </div>
+            <div class="text-right pb-3 text-slate-500 font-mono text-sm">
+                Matches: {{ filteredEvents.length }}
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div v-for="event in filteredEvents" :key="event.name" 
+                class="event-card bg-slate-900 border border-slate-800 rounded-xl p-6 transition-all duration-300 flex flex-col justify-between">
+                
+                <div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[10px] bg-slate-800 text-blue-400 px-2 py-1 rounded font-bold uppercase tracking-tighter border border-slate-700">
+                            {{ event.category }}
+                        </span>
+                    </div>
+                    
+                    <h3 class="text-xl font-mono font-bold text-white mb-2">{{ event.name }}</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4 min-h-[60px]">
+                        {{ event.description }}
+                    </p>
+                    
+                    <div class="bg-black/40 rounded-md p-3 mb-4">
+                        <p class="text-[11px] text-slate-500 uppercase font-bold mb-1">Parameters</p>
+                        <code class="text-emerald-400 text-xs break-all">
+                            {{ event.parameters || 'none' }}
+                        </code>
+                    </div>
+                </div>
+
+                <button @click="copySnippet(event)" class="w-full py-2 bg-slate-800 hover:bg-blue-600 text-white rounded font-bold text-xs transition-colors">
+                    COPY HANDLER
+                </button>
+            </div>
+        </div>
+        <transition name="fade">
+            <div v-if="showToast" class="absolute -top-14 left-1/2 -translate-x-1/2 bg-indigo-600 text-white px-6 py-2 rounded-2xl text-xs font-black shadow-2xl">
+                COPIED TO CLIPBOARD
+            </div>
+        </transition>
+    </div>
+
+    <script>
+    const { createApp, ref, computed } = Vue;
+
+    createApp({
+        setup() {
+            const search = ref('');
+            const showToast = ref(false);
+            const selectedCategory = ref('All');
+
+            const categories = ['State', 'Interaction', 'Collision', 'Comm', 'Sensors', 'Movement', 'Data/Inventory', 'Systems', 'NPC/Pathfinding'];
+
+            const events = ref([
+                { name: 'at_rot_target', parameters: 'integer handle, rotation target_rot, rotation current_rot', category: 'Movement', description: 'Triggered when the object\'s rotation is within a specified range of a target rotation.' },
+                { name: 'at_target', parameters: 'integer handle, vector target_pos, vector current_pos', category: 'Movement', description: 'Triggered when the object is within a specified distance of a target position.' },
+                { name: 'attach', parameters: 'key id', category: 'Interaction', description: 'Triggered when an object is attached to or detached from an avatar.' },
+                { name: 'changed', parameters: 'integer change', category: 'Data/Inventory', description: 'Triggered when various attributes of the object change (inventory, color, shape, etc).' },
+                { name: 'collision', parameters: 'integer num_detected', category: 'Collision', description: 'Triggered while another object or avatar is colliding with the script host.' },
+                { name: 'collision_end', parameters: 'integer num_detected', category: 'Collision', description: 'Triggered when a collision ceases.' },
+                { name: 'collision_start', parameters: 'integer num_detected', category: 'Collision', description: 'Triggered at the moment an object or avatar begins colliding.' },
+                { name: 'control', parameters: 'key id, integer level, integer edge', category: 'Interaction', description: 'Triggered when a user presses a movement key while controls are taken by the script.' },
+                { name: 'dataserver', parameters: 'key queryid, string data', category: 'Data/Inventory', description: 'Triggered when the script receives data from the dataserver (notecards, usernames, etc).' },
+                { name: 'email', parameters: 'string time, string address, string subject, string message, integer num_left', category: 'Comm', description: 'Triggered when an email is received by the object.' },
+                { name: 'experience_permissions', parameters: 'key agent_id', category: 'Systems', description: 'Triggered when an experience permission is granted.' },
+                { name: 'experience_permissions_denied', parameters: 'key agent_id, integer reason', category: 'Systems', description: 'Triggered when an experience permission is denied.' },
+                { name: 'http_request', parameters: 'key id, string method, string body', category: 'Comm', description: 'Triggered when an incoming HTTP request is received.' },
+                { name: 'http_response', parameters: 'key request_id, integer status, list metadata, string body', category: 'Comm', description: 'Triggered when a response to an llHTTPRequest is received.' },
+                { name: 'land_collision', parameters: 'vector pos', category: 'Collision', description: 'Triggered when the object collides with the ground.' },
+                { name: 'land_collision_end', parameters: 'vector pos', category: 'Collision', description: 'Triggered when the object stops colliding with the ground.' },
+                { name: 'land_collision_start', parameters: 'vector pos', category: 'Collision', description: 'Triggered when the object first hits the ground.' },
+                { name: 'link_message', parameters: 'integer sender_num, integer num, string str, key id', category: 'Comm', description: 'Triggered when a message is received from another script in the same linkset.' },
+                { name: 'linkset_data', parameters: 'integer action, string name, string value', category: 'Data/Inventory', description: 'Triggered when the linkset\'s internal data store is updated.' },
+                { name: 'listen', parameters: 'integer channel, string name, key id, string message', category: 'Comm', description: 'Triggered when a chat message is heard on a monitored channel.' },
+                { name: 'money', parameters: 'key id, integer amount', category: 'Systems', description: 'Triggered when an avatar pays L$ to the object.' },
+                { name: 'moving_end', parameters: 'none', category: 'Movement', description: 'Triggered when the object stops moving.' },
+                { name: 'moving_start', parameters: 'none', category: 'Movement', description: 'Triggered when the object begins moving.' },
+                { name: 'no_sensor', parameters: 'none', category: 'Sensors', description: 'Triggered when a sensor scan finds nothing.' },
+                { name: 'not_at_rot_target', parameters: 'none', category: 'Movement', description: 'Triggered if the object is NOT at the target rotation.' },
+                { name: 'not_at_target', parameters: 'none', category: 'Movement', description: 'Triggered if the object is NOT at the target position.' },
+                { name: 'object_rez', parameters: 'key id', category: 'Data/Inventory', description: 'Triggered in the rezzing script when it successfully rezzes another object.' },
+                { name: 'on_rez', parameters: 'integer start_param', category: 'State', description: 'Triggered in a newly rezzed object.' },
+                { name: 'path_update', parameters: 'integer type, list reserved', category: 'NPC/Pathfinding', description: 'Triggered when an NPC pathfinding status changes.' },
+                { name: 'remote_data', parameters: 'integer event_type, key channel, key message_id, string sender, integer idata, string sdata', category: 'Comm', description: 'Triggered by XML-RPC calls.' },
+                { name: 'run_time_permissions', parameters: 'integer perm', category: 'Systems', description: 'Triggered when an avatar responds to a request for permissions.' },
+                { name: 'sensor', parameters: 'integer num_detected', category: 'Sensors', description: 'Triggered when a sensor scan detects objects/avatars.' },
+                { name: 'state_entry', parameters: 'none', category: 'State', description: 'Triggered whenever a state is entered (including script start).' },
+                { name: 'state_exit', parameters: 'none', category: 'State', description: 'Triggered before leaving one state for another.' },
+                { name: 'timer', parameters: 'none', category: 'Systems', description: 'Triggered at the interval set by llSetTimerEvent.' },
+                { name: 'touch', parameters: 'integer num_detected', category: 'Interaction', description: 'Triggered while an avatar is continuously touching the object.' },
+                { name: 'touch_end', parameters: 'integer num_detected', category: 'Interaction', description: 'Triggered when an avatar stops touching the object.' },
+                { name: 'touch_start', parameters: 'integer num_detected', category: 'Interaction', description: 'Triggered when an avatar first touches the object.' },
+                { name: 'transaction_result', parameters: 'key id, integer success, string data', category: 'Systems', description: 'Triggered when an asynchronous transaction (like a web request or money task) completes.' }
+            ]);
+
+            const filteredEvents = computed(() => {
+                return events.value.filter(e => {
+                    const matchText = e.name.toLowerCase().includes(search.value.toLowerCase()) || 
+                                     e.description.toLowerCase().includes(search.value.toLowerCase());
+                    const matchCat = selectedCategory.value === 'All' || e.category === selectedCategory.value;
+                    return matchText && matchCat;
+                }).sort((a,b) => a.name.localeCompare(b.name));
+            });
+
+            const copySnippet = (event) => {
+                const code = `${event.name}(${event.parameters === 'none' ? '' : event.parameters}) \n{\n    // Your code here\n}`;
+
+                navigator.clipboard.writeText(code).then(() => {
+                    showToast.value = true;
+                    setTimeout(() => showToast.value = false, 2000);
+                });
+                // alert(`Copied ${event.name} handler to clipboard!`);
+            };
+
+            return { search, selectedCategory, categories, events, filteredEvents,showToast, copySnippet };
+        }
+    }).mount('#app');
+    </script>
+</body>
+</html>
