@@ -16,7 +16,7 @@
     <div id="app" v-cloak class="max-w-7xl mx-auto p-4 md:p-10">
         <header class="mb-12 border-b border-slate-800 pb-8">
             <h1 class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 mb-3">
-                LSL Master Event List
+                LSL Class - Event List
             </h1>
             <p class="text-slate-400 text-lg">The complete technical reference for all 39 Linden Scripting Language events.</p>
         </header>
@@ -43,6 +43,8 @@
             <div v-for="event in filteredEvents" :key="event.name" 
                 class="event-card bg-slate-900 border border-slate-800 rounded-xl p-6 transition-all duration-300 flex flex-col justify-between">
                 
+
+
                 <div>
                     <div class="flex justify-between items-start mb-4">
                         <span class="text-[10px] bg-slate-800 text-blue-400 px-2 py-1 rounded font-bold uppercase tracking-tighter border border-slate-700">
@@ -53,6 +55,8 @@
                     <h3 class="text-xl font-mono font-bold text-white mb-2">{{ event.name }}</h3>
                     <p class="text-slate-400 text-sm leading-relaxed mb-4 min-h-[60px]">
                         {{ event.description }}
+                        <br/>
+                        <a :href= "event.reference" target="_blank" rel="noopener noreferrer" class="text-blue-400">Reference</a>
                     </p>
                     
                     <div class="bg-black/40 rounded-md p-3 mb-4">
@@ -63,7 +67,7 @@
                     </div>
                 </div>
 
-                <button @click="copySnippet(event)" class="w-full py-2 bg-slate-800 hover:bg-blue-600 text-white rounded font-bold text-xs transition-colors">
+                <button @click="copySnippet(event)" class="w-full py-2 text-slate-400 bg-slate-800" :disabled="!event.inprogram"  :class="{ 'hover:bg-blue-600 text-white rounded font-bold text-xs transition-colors': event.inprogram }" v-if="event.inprogram">
                     COPY HANDLER
                 </button>
             </div>
@@ -87,45 +91,45 @@
             const categories = ['State', 'Interaction', 'Collision', 'Comm', 'Sensors', 'Movement', 'Data/Inventory', 'Systems', 'NPC/Pathfinding'];
 
             const events = ref([
-                { name: 'at_rot_target', parameters: 'integer handle, rotation target_rot, rotation current_rot', category: 'Movement', description: 'Triggered when the object\'s rotation is within a specified range of a target rotation.' },
-                { name: 'at_target', parameters: 'integer handle, vector target_pos, vector current_pos', category: 'Movement', description: 'Triggered when the object is within a specified distance of a target position.' },
-                { name: 'attach', parameters: 'key id', category: 'Interaction', description: 'Triggered when an object is attached to or detached from an avatar.' },
-                { name: 'changed', parameters: 'integer change', category: 'Data/Inventory', description: 'Triggered when various attributes of the object change (inventory, color, shape, etc).' },
-                { name: 'collision', parameters: 'integer num_detected', category: 'Collision', description: 'Triggered while another object or avatar is colliding with the script host.' },
-                { name: 'collision_end', parameters: 'integer num_detected', category: 'Collision', description: 'Triggered when a collision ceases.' },
-                { name: 'collision_start', parameters: 'integer num_detected', category: 'Collision', description: 'Triggered at the moment an object or avatar begins colliding.' },
-                { name: 'control', parameters: 'key id, integer level, integer edge', category: 'Interaction', description: 'Triggered when a user presses a movement key while controls are taken by the script.' },
-                { name: 'dataserver', parameters: 'key queryid, string data', category: 'Data/Inventory', description: 'Triggered when the script receives data from the dataserver (notecards, usernames, etc).' },
-                { name: 'email', parameters: 'string time, string address, string subject, string message, integer num_left', category: 'Comm', description: 'Triggered when an email is received by the object.' },
-                { name: 'experience_permissions', parameters: 'key agent_id', category: 'Systems', description: 'Triggered when an experience permission is granted.' },
-                { name: 'experience_permissions_denied', parameters: 'key agent_id, integer reason', category: 'Systems', description: 'Triggered when an experience permission is denied.' },
-                { name: 'http_request', parameters: 'key id, string method, string body', category: 'Comm', description: 'Triggered when an incoming HTTP request is received.' },
-                { name: 'http_response', parameters: 'key request_id, integer status, list metadata, string body', category: 'Comm', description: 'Triggered when a response to an llHTTPRequest is received.' },
-                { name: 'land_collision', parameters: 'vector pos', category: 'Collision', description: 'Triggered when the object collides with the ground.' },
-                { name: 'land_collision_end', parameters: 'vector pos', category: 'Collision', description: 'Triggered when the object stops colliding with the ground.' },
-                { name: 'land_collision_start', parameters: 'vector pos', category: 'Collision', description: 'Triggered when the object first hits the ground.' },
-                { name: 'link_message', parameters: 'integer sender_num, integer num, string str, key id', category: 'Comm', description: 'Triggered when a message is received from another script in the same linkset.' },
-                { name: 'linkset_data', parameters: 'integer action, string name, string value', category: 'Data/Inventory', description: 'Triggered when the linkset\'s internal data store is updated.' },
-                { name: 'listen', parameters: 'integer channel, string name, key id, string message', category: 'Comm', description: 'Triggered when a chat message is heard on a monitored channel.' },
-                { name: 'money', parameters: 'key id, integer amount', category: 'Systems', description: 'Triggered when an avatar pays L$ to the object.' },
-                { name: 'moving_end', parameters: 'none', category: 'Movement', description: 'Triggered when the object stops moving.' },
-                { name: 'moving_start', parameters: 'none', category: 'Movement', description: 'Triggered when the object begins moving.' },
-                { name: 'no_sensor', parameters: 'none', category: 'Sensors', description: 'Triggered when a sensor scan finds nothing.' },
-                { name: 'not_at_rot_target', parameters: 'none', category: 'Movement', description: 'Triggered if the object is NOT at the target rotation.' },
-                { name: 'not_at_target', parameters: 'none', category: 'Movement', description: 'Triggered if the object is NOT at the target position.' },
-                { name: 'object_rez', parameters: 'key id', category: 'Data/Inventory', description: 'Triggered in the rezzing script when it successfully rezzes another object.' },
-                { name: 'on_rez', parameters: 'integer start_param', category: 'State', description: 'Triggered in a newly rezzed object.' },
-                { name: 'path_update', parameters: 'integer type, list reserved', category: 'NPC/Pathfinding', description: 'Triggered when an NPC pathfinding status changes.' },
-                { name: 'remote_data', parameters: 'integer event_type, key channel, key message_id, string sender, integer idata, string sdata', category: 'Comm', description: 'Triggered by XML-RPC calls.' },
-                { name: 'run_time_permissions', parameters: 'integer perm', category: 'Systems', description: 'Triggered when an avatar responds to a request for permissions.' },
-                { name: 'sensor', parameters: 'integer num_detected', category: 'Sensors', description: 'Triggered when a sensor scan detects objects/avatars.' },
-                { name: 'state_entry', parameters: 'none', category: 'State', description: 'Triggered whenever a state is entered (including script start).' },
-                { name: 'state_exit', parameters: 'none', category: 'State', description: 'Triggered before leaving one state for another.' },
-                { name: 'timer', parameters: 'none', category: 'Systems', description: 'Triggered at the interval set by llSetTimerEvent.' },
-                { name: 'touch', parameters: 'integer num_detected', category: 'Interaction', description: 'Triggered while an avatar is continuously touching the object.' },
-                { name: 'touch_end', parameters: 'integer num_detected', category: 'Interaction', description: 'Triggered when an avatar stops touching the object.' },
-                { name: 'touch_start', parameters: 'integer num_detected', category: 'Interaction', description: 'Triggered when an avatar first touches the object.' },
-                { name: 'transaction_result', parameters: 'key id, integer success, string data', category: 'Systems', description: 'Triggered when an asynchronous transaction (like a web request or money task) completes.' }
+                {reference:'https://wiki.secondlife.com/wiki/At_rot_target', inprogram:false, name: 'at_rot_target', parameters: 'integer handle, rotation target_rot, rotation current_rot', category: 'Movement', description: 'Triggered when the object\'s rotation is within a specified range of a target rotation.' },
+                {reference:'#', inprogram:false, name: 'at_target', parameters: 'integer handle, vector target_pos, vector current_pos', category: 'Movement', description: 'Triggered when the object is within a specified distance of a target position.' },
+                {reference:'#', inprogram:false, name: 'attach', parameters: 'key id', category: 'Interaction', description: 'Triggered when an object is attached to or detached from an avatar.' },
+                {reference:'#', inprogram:false, name: 'changed', parameters: 'integer change', category: 'Data/Inventory', description: 'Triggered when various attributes of the object change (inventory, color, shape, etc).' },
+                {reference:'#', inprogram:false, name: 'collision', parameters: 'integer num_detected', category: 'Collision', description: 'Triggered while another object or avatar is colliding with the script host.' },
+                {reference:'#', inprogram:false, name: 'collision_end', parameters: 'integer num_detected', category: 'Collision', description: 'Triggered when a collision ceases.' },
+                {reference:'#', inprogram:false, name: 'collision_start', parameters: 'integer num_detected', category: 'Collision', description: 'Triggered at the moment an object or avatar begins colliding.' },
+                {reference:'#', inprogram:false, name: 'control', parameters: 'key id, integer level, integer edge', category: 'Interaction', description: 'Triggered when a user presses a movement key while controls are taken by the script.' },
+                {reference:'#', inprogram:false, name: 'dataserver', parameters: 'key queryid, string data', category: 'Data/Inventory', description: 'Triggered when the script receives data from the dataserver (notecards, usernames, etc).' },
+                {reference:'#', inprogram:false, name: 'email', parameters: 'string time, string address, string subject, string message, integer num_left', category: 'Comm', description: 'Triggered when an email is received by the object.' },
+                {reference:'#', inprogram:false, name: 'experience_permissions', parameters: 'key agent_id', category: 'Systems', description: 'Triggered when an experience permission is granted.' },
+                {reference:'#', inprogram:false, name: 'experience_permissions_denied', parameters: 'key agent_id, integer reason', category: 'Systems', description: 'Triggered when an experience permission is denied.' },
+                {reference:'#', inprogram:false, name: 'http_request', parameters: 'key id, string method, string body', category: 'Comm', description: 'Triggered when an incoming HTTP request is received.' },
+                {reference:'#', inprogram:false, name: 'http_response', parameters: 'key request_id, integer status, list metadata, string body', category: 'Comm', description: 'Triggered when a response to an llHTTPRequest is received.' },
+                {reference:'#', inprogram:false, name: 'land_collision', parameters: 'vector pos', category: 'Collision', description: 'Triggered when the object collides with the ground.' },
+                {reference:'#', inprogram:false, name: 'land_collision_end', parameters: 'vector pos', category: 'Collision', description: 'Triggered when the object stops colliding with the ground.' },
+                {reference:'#', inprogram:false, name: 'land_collision_start', parameters: 'vector pos', category: 'Collision', description: 'Triggered when the object first hits the ground.' },
+                {reference:'#', inprogram:false, name: 'link_message', parameters: 'integer sender_num, integer num, string str, key id', category: 'Comm', description: 'Triggered when a message is received from another script in the same linkset.' },
+                {reference:'#', inprogram:false, name: 'linkset_data', parameters: 'integer action, string name, string value', category: 'Data/Inventory', description: 'Triggered when the linkset\'s internal data store is updated.' },
+                {reference:'#', inprogram:false, name: 'listen', parameters: 'integer channel, string name, key id, string message', category: 'Comm', description: 'Triggered when a chat message is heard on a monitored channel.' },
+                {reference:'#', inprogram:false, name: 'money', parameters: 'key id, integer amount', category: 'Systems', description: 'Triggered when an avatar pays L$ to the object.' },
+                {reference:'#', inprogram:false, name: 'moving_end', parameters: 'none', category: 'Movement', description: 'Triggered when the object stops moving.' },
+                {reference:'#', inprogram:false, name: 'moving_start', parameters: 'none', category: 'Movement', description: 'Triggered when the object begins moving.' },
+                {reference:'#', inprogram:false, name: 'no_sensor', parameters: 'none', category: 'Sensors', description: 'Triggered when a sensor scan finds nothing.' },
+                {reference:'#', inprogram:false, name: 'not_at_rot_target', parameters: 'none', category: 'Movement', description: 'Triggered if the object is NOT at the target rotation.' },
+                {reference:'#', inprogram:false, name: 'not_at_target', parameters: 'none', category: 'Movement', description: 'Triggered if the object is NOT at the target position.' },
+                {reference:'#', inprogram:false, name: 'object_rez', parameters: 'key id', category: 'Data/Inventory', description: 'Triggered in the rezzing script when it successfully rezzes another object.' },
+                {reference:'https://wiki.secondlife.com/wiki/On_rez', inprogram:true, name: 'on_rez', parameters: 'integer start_param', category: 'State', description: 'Triggered in a newly rezzed object.' },
+                {reference:'#', inprogram:false, name: 'path_update', parameters: 'integer type, list reserved', category: 'NPC/Pathfinding', description: 'Triggered when an NPC pathfinding status changes.' },
+                {reference:'#', inprogram:false, name: 'remote_data', parameters: 'integer event_type, key channel, key message_id, string sender, integer idata, string sdata', category: 'Comm', description: 'Triggered by XML-RPC calls.' },
+                {reference:'#', inprogram:false, name: 'run_time_permissions', parameters: 'integer perm', category: 'Systems', description: 'Triggered when an avatar responds to a request for permissions.' },
+                {reference:'#', inprogram:false, name: 'sensor', parameters: 'integer num_detected', category: 'Sensors', description: 'Triggered when a sensor scan detects objects/avatars.' },
+                {reference:'https://wiki.secondlife.com/wiki/State_entry', inprogram:true, name: 'state_entry', parameters: 'none', category: 'State', description: 'Triggered whenever a state is entered (including script start).' },
+                {reference:'https://wiki.secondlife.com/wiki/State_exit', inprogram:true, name: 'state_exit', parameters: 'none', category: 'State', description: 'Triggered before leaving one state for another.' },
+                {reference:'https://wiki.secondlife.com/wiki/Timer', inprogram:true, name: 'timer', parameters: 'none', category: 'Systems', description: 'Triggered at the interval set by llSetTimerEvent.' },
+                {reference:'https://wiki.secondlife.com/wiki/Touch', inprogram:true, name: 'touch', parameters: 'integer num_detected', category: 'Interaction', description: 'Triggered while an avatar is continuously touching the object.' },
+                {reference:'https://wiki.secondlife.com/wiki/Touch_end', inprogram:true, name: 'touch_end', parameters: 'integer num_detected', category: 'Interaction', description: 'Triggered when an avatar stops touching the object.' },
+                {reference:'https://wiki.secondlife.com/wiki/Touch_start', inprogram:true, name: 'touch_start', parameters: 'integer num_detected', category: 'Interaction', description: 'Triggered when an avatar first touches the object.' },
+                {reference:'#', inprogram:false, name: 'transaction_result', parameters: 'key id, integer success, string data', category: 'Systems', description: 'Triggered when an asynchronous transaction (like a web request or money task) completes.' }
             ]);
 
             const filteredEvents = computed(() => {
